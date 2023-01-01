@@ -7,6 +7,9 @@ set(SOURCES
 
     rest_server.cpp
     request_handler.cpp
+
+    http/method_handler.cpp
+    http/simple_rest.cpp
 )
 
 set(LIBRARIES
