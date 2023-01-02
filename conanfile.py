@@ -5,9 +5,11 @@ class RestServer(ConanFile):
     name = 'REST Server'
     version = '1.0.0'
 
-    generators = [
-        'cmake',
-    ]
+    settings = ['os',
+                'compiler',
+                'build_type',
+                'arch',
+                ]
 
     options = {
         'shared': [True, False],
@@ -23,21 +25,28 @@ class RestServer(ConanFile):
         'with_postgresql': True,
     }
 
-    requires = [
-        'poco/1.12.4',
-        'soci/4.0.3',
-
-        'libpq/14.5',
-        'sqlite3/3.39.4',
-        'libmysqlclient/8.0.30',
-
-        'nlohmann_json/3.11.2',
-    ]
-
     def configure(self):
-        self.options['soci'].with_sqlite3 = self.options.with_sqlite3
+        self.generators = [
+            'cmake',
+        ]
+
         self.options['soci'].with_mysql = self.options.with_mysql
+        self.options['soci'].with_sqlite3 = self.options.with_sqlite3
         self.options['soci'].with_postgresql = self.options.with_postgresql
+
+    def requirements(self):
+        self.requires('nlohmann_json/3.11.2')
+        self.requires('poco/1.12.4')
+        self.requires('soci/4.0.3')
+
+        if self.options.with_sqlite3:
+            self.requires('sqlite3/3.39.4')
+
+        if self.options.with_mysql:
+            self.requires('libpq/14.5')
+
+        if self.options.with_postgresql:
+            self.requires('libmysqlclient/8.0.30')
 
     def build(self):
         cmake = CMake(self)
