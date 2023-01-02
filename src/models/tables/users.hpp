@@ -3,6 +3,7 @@
 #include <models/tables/crud_interface.hpp>
 
 #include <soci/session.h>
+#include <soci/statement.h>
 
 #include <memory>
 
@@ -24,4 +25,9 @@ public:
 
 private:
     std::shared_ptr<soci::session> session_;
+
+    soci::statement delete_;
+    soci::statement insert_;
+    soci::statement update_;
+    soci::statement select_;
 };

@@ -25,12 +25,21 @@ static const std::string DeleteUser = "DELETE FROM Users WHERE ID = :ID";
 
 UsersTable::UsersTable(std::shared_ptr<soci::session> session)
     : session_{session}
+    , delete_{*session_}
+    , insert_{*session_}
+    , update_{*session_}
+    , select_{*session_}
 {
     try
     {
         soci::transaction transaction{*session_};
         *session_ << querries::CreateTable;
         transaction.commit();
+
+        insert_.prepare(querries::InsertUser);
+        update_.prepare(querries::UpdateUser);
+        select_.prepare(querries::SelectUser);
+        delete_.prepare(querries::DeleteUser);
     }
     catch (const std::exception &e)
     {
@@ -44,7 +53,14 @@ void UsersTable::Insert(const User &user)
     try
     {
         soci::transaction transaction{*session_};
-        *session_ << querries::InsertUser, soci::use(user.name), soci::use(user.password);
+
+        insert_.exchange(soci::use(user.name));
+        insert_.exchange(soci::use(user.password));
+
+        insert_.define_and_bind();
+        insert_.execute(true);
+        insert_.bind_clean_up();
+
         transaction.commit();
     }
     catch (const std::exception &e)
@@ -59,7 +75,15 @@ void UsersTable::Update(size_t id, const User &user)
     try
     {
         soci::transaction transaction{*session_};
-        *session_ << querries::UpdateUser, soci::use(user.name), soci::use(user.password), soci::use(id);
+
+        update_.exchange(soci::use(user.name));
+        update_.exchange(soci::use(user.password));
+        update_.exchange(soci::use(id));
+
+        update_.define_and_bind();
+        update_.execute(true);
+        update_.bind_clean_up();
+
         transaction.commit();
     }
     catch (const std::exception &e)
@@ -73,7 +97,13 @@ void UsersTable::Select(size_t id, User &user)
 {
     try
     {
-        *session_ << querries::SelectUser, soci::use(id), soci::into(user.name), soci::into(user.password);
+        select_.exchange(soci::use(id));
+        select_.exchange(soci::into(user.name));
+        select_.exchange(soci::into(user.password));
+
+        select_.define_and_bind();
+        select_.execute(true);
+        select_.bind_clean_up();
     }
     catch (const std::exception &e)
     {
@@ -87,7 +117,13 @@ void UsersTable::Delete(size_t id)
     try
     {
         soci::transaction transaction{*session_};
-        *session_ << querries::DeleteUser, soci::use(id);
+
+        delete_.exchange(soci::use(id));
+
+        delete_.define_and_bind();
+        delete_.execute(true);
+        delete_.bind_clean_up();
+
         transaction.commit();
     }
     catch (const std::exception &e)
