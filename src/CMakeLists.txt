@@ -1,22 +1,19 @@
-set(TARGET rest)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/rest
+)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+add_subdirectory(rest)
+
+set(TARGET rest)
 
 set(SOURCES
     main.cpp
-
-    rest_server.cpp
-    request_handler.cpp
-
-    http/method_handler.cpp
-    http/simple_rest.cpp
-
-    models/tables/users.cpp
 )
 
 set(LIBRARIES
-    ${CONAN_LIBS}
+    rest_server
 )
 
-add_executable(${TARGET} ${SOURCES})
-target_link_libraries(${TARGET} PRIVATE ${LIBRARIES})
+add_executable(${TARGET} main.cpp)
+target_link_libraries(${TARGET} PRIVATE rest_server)
