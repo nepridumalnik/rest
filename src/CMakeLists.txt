@@ -10,6 +10,8 @@ set(SOURCES
 
     http/method_handler.cpp
     http/simple_rest.cpp
+
+    models/tables/users.cpp
 )
 
 set(LIBRARIES
