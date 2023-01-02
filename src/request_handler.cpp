@@ -4,6 +4,8 @@
 
 #include <Poco/Net/HTTPServerRequest.h>
 
+#include <iostream>
+
 Poco::Net::HTTPRequestHandler *RequestHandler::createRequestHandler(const Poco::Net::HTTPServerRequest &request)
 {
     std::cout << request.getURI() << std::endl;
