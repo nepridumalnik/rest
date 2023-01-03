@@ -1,6 +1,6 @@
 #include <rest_server.hpp>
 
-#include <request_handler.hpp>
+#include <http/request_handler.hpp>
 
 #include <soci/sqlite3/soci-sqlite3.h>
 
@@ -18,9 +18,7 @@ RestServer::RestServer(std::shared_ptr<soci::session> sql)
         sql_ = std::make_shared<soci::session>(soci::sqlite3, ::DefaultDB);
     }
 
-    users_ = std::make_shared<UsersTable>(sql_);
-
-    requestHandler_ = Poco::makeShared<RequestHandler>();
+    requestHandler_ = Poco::makeShared<RequestHandler>(sql_);
     server_ = Poco::makeShared<Poco::Net::HTTPServer>(requestHandler_);
 }
 

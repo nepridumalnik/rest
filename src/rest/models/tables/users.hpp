@@ -13,7 +13,7 @@ struct User
     std::string password;
 };
 
-class UsersTable : public Crud<User>
+class UsersTable : public ICrud<User>
 {
 public:
     explicit UsersTable(std::shared_ptr<soci::session> session);

@@ -23,5 +23,4 @@ private:
     Poco::Net::HTTPRequestHandlerFactory::Ptr requestHandler_;
 
     std::shared_ptr<soci::session> sql_;
-    std::shared_ptr<UsersTable> users_;
 };

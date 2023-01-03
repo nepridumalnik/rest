@@ -2,10 +2,10 @@ set(TARGET rest_server)
 
 set(SOURCES
     rest_server.cpp
-    request_handler.cpp
 
+    http/request_handler.cpp
     http/method_handler.cpp
-    http/simple_rest.cpp
+    http/controllers/users_controller.cpp
 
     models/tables/users.cpp
 )
