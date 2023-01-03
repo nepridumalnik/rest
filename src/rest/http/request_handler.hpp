@@ -1,5 +1,7 @@
 #pragma once
 
+#include <http/method_handler.hpp>
+
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
 #include <soci/session.h>
@@ -17,4 +19,5 @@ public:
 
 private:
     std::shared_ptr<soci::session> sql_;
+    std::unordered_map<std::string, std::function<MethodHandler *()>> routing_;
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Poco/Net/HTTPRequestHandler.h>
 
 struct MethodHandler : public Poco::Net::HTTPRequestHandler
