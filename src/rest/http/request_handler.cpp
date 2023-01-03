@@ -7,18 +7,19 @@
 RequestHandler::RequestHandler(std::shared_ptr<soci::session> sql)
     : sql_{sql}
 {
-    routing_["/users"] = [this]() -> MethodHandler * { return new UsersController{sql_}; };
+    routing_.push_back({"/users", [this]() -> MethodHandler * { return new UsersController{sql_}; }});
 }
 
 Poco::Net::HTTPRequestHandler *RequestHandler::createRequestHandler(const Poco::Net::HTTPServerRequest &request)
 {
     const std::string requestedUri = request.getURI();
 
-    const auto it = routing_.find(requestedUri);
-
-    if (routing_.end() != it)
+    for (const auto &it : routing_)
     {
-        return it->second();
+        if (0 == requestedUri.find(it.first))
+        {
+            return it.second();
+        }
     }
 
     return nullptr;

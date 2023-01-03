@@ -4,6 +4,8 @@
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 
+#include <nlohmann/json.hpp>
+
 #include <iostream>
 #include <sstream>
 
@@ -16,12 +18,34 @@ UsersController::UsersController(std::shared_ptr<soci::session> sql)
 
 void UsersController::Get(net::HTTPServerRequest &request, net::HTTPServerResponse &response)
 {
-    std::cout << "Get" << std::endl;
+    std::cout << "Get " << request.getURI() << std::endl;
+    const std::string requestUri = request.getURI();
 
-    const size_t count = users_->Count();
+    const auto delimiter = requestUri.rfind('/');
 
-    const std::string ss = "<h1>Users count: " + std::to_string(count) + "</h1>";
-    response.sendBuffer(ss.c_str(), ss.size());
+    if (0 != delimiter && std::string::npos != delimiter)
+    {
+        const auto id = std::stoul(&requestUri[delimiter + 1]);
+
+        User user;
+        users_->FindById(id, user);
+
+        nlohmann::json object;
+
+        object["id"] = id;
+        object["name"] = user.name;
+        object["password"] = user.password;
+
+        const std::string serializedUser = object.dump();
+        response.sendBuffer(serializedUser.c_str(), serializedUser.size());
+    }
+    else
+    {
+        const size_t count = users_->Count();
+
+        const std::string numberOfUsers = "<h1>Users count: " + std::to_string(count) + "</h1>";
+        response.sendBuffer(numberOfUsers.c_str(), numberOfUsers.size());
+    }
 }
 
 void UsersController::Post(net::HTTPServerRequest &request, net::HTTPServerResponse &response)

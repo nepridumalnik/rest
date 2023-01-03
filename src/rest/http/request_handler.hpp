@@ -8,7 +8,7 @@
 
 #include <functional>
 #include <memory>
-#include <unordered_map>
+#include <vector>
 
 class RequestHandler : public Poco::Net::HTTPRequestHandlerFactory
 {
@@ -19,5 +19,5 @@ public:
 
 private:
     std::shared_ptr<soci::session> sql_;
-    std::unordered_map<std::string, std::function<MethodHandler *()>> routing_;
+    std::vector<std::pair<std::string, std::function<MethodHandler *()>>> routing_;
 };
