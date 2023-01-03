@@ -147,8 +147,8 @@ void UsersTable::FindAll(std::vector<User> &users)
         for (size_t i = 0; i < users.size(); ++i)
         {
             users[i].id = ids[i];
-            users[i].name = names[i];
-            users[i].password = passwords[i];
+            users[i].name = std::move(names[i]);
+            users[i].password = std::move(passwords[i]);
         }
     }
     catch (const std::exception &e)
