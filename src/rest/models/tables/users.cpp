@@ -17,6 +17,8 @@ static const std::string InsertUser = "INSERT INTO Users(User, Password) VALUES(
 
 static const std::string SelectUser = "SELECT User, Password FROM Users WHERE ID = :ID";
 
+static const std::string SelectAllUsers = "SELECT ID, User, Password FROM Users";
+
 static const std::string UpdateUser = "UPDATE Users SET User = :User, Password = :Password WHERE ID = :ID";
 
 static const std::string DeleteUser = "DELETE FROM Users WHERE ID = :ID";
@@ -31,6 +33,7 @@ UsersTable::UsersTable(std::shared_ptr<soci::session> session)
     , insert_{*session_}
     , update_{*session_}
     , select_{*session_}
+    , selectAll_{*session_}
     , count_{*session_}
 {
     try
@@ -42,6 +45,7 @@ UsersTable::UsersTable(std::shared_ptr<soci::session> session)
         insert_.prepare(querries::InsertUser);
         update_.prepare(querries::UpdateUser);
         select_.prepare(querries::SelectUser);
+        selectAll_.prepare(querries::SelectAllUsers);
         delete_.prepare(querries::DeleteUser);
         count_.prepare(querries::CountUsers);
     }
@@ -108,6 +112,44 @@ void UsersTable::FindById(size_t id, User &user)
         select_.define_and_bind();
         select_.execute(true);
         select_.bind_clean_up();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+        throw;
+    }
+}
+
+void UsersTable::FindAll(std::vector<User> &users)
+{
+    try
+    {
+        users.clear();
+
+        const size_t count = Count();
+        std::vector<size_t> ids;
+        std::vector<std::string> names;
+        std::vector<std::string> passwords;
+
+        ids.resize(count);
+        names.resize(count);
+        passwords.resize(count);
+
+        selectAll_.exchange(soci::into(ids));
+        selectAll_.exchange(soci::into(names));
+        selectAll_.exchange(soci::into(passwords));
+
+        selectAll_.define_and_bind();
+        selectAll_.execute(true);
+        selectAll_.bind_clean_up();
+
+        users.resize(count);
+        for (size_t i = 0; i < users.size(); ++i)
+        {
+            users[i].id = ids[i];
+            users[i].name = names[i];
+            users[i].password = passwords[i];
+        }
     }
     catch (const std::exception &e)
     {

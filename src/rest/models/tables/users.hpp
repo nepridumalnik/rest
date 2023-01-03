@@ -9,6 +9,7 @@
 
 struct User
 {
+    size_t id;
     std::string name;
     std::string password;
 };
@@ -21,6 +22,7 @@ public:
     void Insert(const User &user) override;
     void Update(size_t id, const User &user) override;
     void FindById(size_t id, User &user) override;
+    void FindAll(std::vector<User> &users) override;
     void Delete(size_t id) override;
     size_t Count() override;
 
@@ -31,5 +33,6 @@ private:
     soci::statement insert_;
     soci::statement update_;
     soci::statement select_;
+    soci::statement selectAll_;
     soci::statement count_;
 };

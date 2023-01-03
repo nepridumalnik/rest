@@ -41,10 +41,24 @@ void UsersController::Get(net::HTTPServerRequest &request, net::HTTPServerRespon
     }
     else
     {
-        const size_t count = users_->Count();
+        std::vector<User> users;
+        users_->FindAll(users);
 
-        const std::string numberOfUsers = "<h1>Users count: " + std::to_string(count) + "</h1>";
-        response.sendBuffer(numberOfUsers.c_str(), numberOfUsers.size());
+        nlohmann::json object = nlohmann::json::array();
+
+        for (const auto &user : users)
+        {
+            nlohmann::json u;
+
+            u["id"] = user.id;
+            u["name"] = user.name;
+            u["password"] = user.password;
+
+            object.push_back(u);
+        }
+
+        const std::string usersArray = object.dump();
+        response.sendBuffer(usersArray.c_str(), usersArray.size());
     }
 }
 
