@@ -18,7 +18,9 @@ void UsersController::Get(net::HTTPServerRequest &request, net::HTTPServerRespon
 {
     std::cout << "Get" << std::endl;
 
-    const std::string ss = "<h1>Hello, rest</h1>";
+    const size_t count = users_->Count();
+
+    const std::string ss = "<h1>Users count: " + std::to_string(count) + "</h1>";
     response.sendBuffer(ss.c_str(), ss.size());
 }
 

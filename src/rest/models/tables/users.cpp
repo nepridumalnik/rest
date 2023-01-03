@@ -21,6 +21,8 @@ static const std::string UpdateUser = "UPDATE Users SET User = :User, Password =
 
 static const std::string DeleteUser = "DELETE FROM Users WHERE ID = :ID";
 
+static const std::string CountUsers = "SELECT COUNT(ID) FROM Users";
+
 } // namespace querries
 
 UsersTable::UsersTable(std::shared_ptr<soci::session> session)
@@ -29,6 +31,7 @@ UsersTable::UsersTable(std::shared_ptr<soci::session> session)
     , insert_{*session_}
     , update_{*session_}
     , select_{*session_}
+    , count_{*session_}
 {
     try
     {
@@ -40,6 +43,7 @@ UsersTable::UsersTable(std::shared_ptr<soci::session> session)
         update_.prepare(querries::UpdateUser);
         select_.prepare(querries::SelectUser);
         delete_.prepare(querries::DeleteUser);
+        count_.prepare(querries::CountUsers);
     }
     catch (const std::exception &e)
     {
@@ -93,7 +97,7 @@ void UsersTable::Update(size_t id, const User &user)
     }
 }
 
-void UsersTable::Select(size_t id, User &user)
+void UsersTable::FindById(size_t id, User &user)
 {
     try
     {
@@ -125,6 +129,26 @@ void UsersTable::Delete(size_t id)
         delete_.bind_clean_up();
 
         transaction.commit();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+        throw;
+    }
+}
+
+size_t UsersTable::Count()
+{
+    try
+    {
+        size_t count = 0;
+        count_.exchange(soci::into(count));
+
+        count_.define_and_bind();
+        count_.execute(true);
+        count_.bind_clean_up();
+
+        return count;
     }
     catch (const std::exception &e)
     {

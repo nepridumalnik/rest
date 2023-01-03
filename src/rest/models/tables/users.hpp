@@ -20,8 +20,9 @@ public:
 
     void Insert(const User &user) override;
     void Update(size_t id, const User &user) override;
-    void Select(size_t id, User &user) override;
+    void FindById(size_t id, User &user) override;
     void Delete(size_t id) override;
+    size_t Count() override;
 
 private:
     std::shared_ptr<soci::session> session_;
@@ -30,4 +31,5 @@ private:
     soci::statement insert_;
     soci::statement update_;
     soci::statement select_;
+    soci::statement count_;
 };
