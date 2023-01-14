@@ -11,6 +11,15 @@
 
 namespace net = Poco::Net;
 
+namespace
+{
+
+static const std::string AccessControlHeaderName = "Access-Control-Allow-Origin";
+
+static const std::string AccessControlHeaderValue = "*";
+
+} // namespace
+
 UsersController::UsersController(std::shared_ptr<soci::session> sql)
     : users_{std::make_shared<UsersTable>(sql)}
 {
@@ -58,6 +67,8 @@ void UsersController::Get(net::HTTPServerRequest &request, net::HTTPServerRespon
         }
 
         const std::string usersArray = object.dump();
+
+        response.set(::AccessControlHeaderName, ::AccessControlHeaderValue);
         response.sendBuffer(usersArray.c_str(), usersArray.size());
     }
 }

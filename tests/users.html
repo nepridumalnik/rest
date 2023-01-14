@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Form</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+
+<body>
+    <div id="app">
+        <button @click="getUsers()">Get Users</button>
+        <p>{{ users }}</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                users: ''
+            },
+            methods: {
+                getUsers() {
+                    this.users = ''
+                    axios.get('http://localhost/users')
+                        .then(response => {
+                            this.users = response.data
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        });
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
