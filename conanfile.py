@@ -5,10 +5,11 @@ class RestServer(ConanFile):
     name = 'REST Server'
     version = '1.0.0'
 
-    settings = ['os',
-                'build_type',
-                'arch',
-                ]
+    settings = [
+        'os',
+        'build_type',
+        'arch',
+    ]
 
     options = {
         'shared': [True, False],
