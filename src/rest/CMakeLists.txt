@@ -6,8 +6,10 @@ set(SOURCES
     http/request_handler.cpp
     http/method_handler.cpp
     http/controllers/users_controller.cpp
+    http/controllers/goods_controller.cpp
 
     models/tables/users.cpp
+    models/tables/goods.cpp
 )
 
 set(LIBRARIES

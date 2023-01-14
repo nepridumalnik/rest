@@ -2,20 +2,20 @@
 
 #include <http/method_handler.hpp>
 
-#include <models/tables/users.hpp>
+#include <models/tables/goods.hpp>
 
 #include <soci/session.h>
 
 #include <memory>
 
-class UsersController : public MethodHandler
+class GoodsController : public MethodHandler
 {
 public:
-    explicit UsersController(std::shared_ptr<soci::session> sql);
+    explicit GoodsController(std::shared_ptr<soci::session> sql);
 
     void Get(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response);
     void Post(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response);
 
 private:
-    std::shared_ptr<UsersTable> users_;
+    std::shared_ptr<GoodsTable> goods_;
 };

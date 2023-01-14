@@ -85,5 +85,6 @@ void UsersController::Post(net::HTTPServerRequest &request, net::HTTPServerRespo
         std::cout << "it->second: " << parameter.second << std::endl;
     }
 
+    response.set(::AccessControlHeaderName, ::AccessControlHeaderValue);
     response.sendBuffer(nullptr, 0);
 }
