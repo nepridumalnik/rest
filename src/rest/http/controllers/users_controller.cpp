@@ -14,9 +14,9 @@ namespace net = Poco::Net;
 namespace
 {
 
-static const std::string AccessControlHeaderName = "Access-Control-Allow-Origin";
+    static const std::string AccessControlHeaderName = "Access-Control-Allow-Origin";
 
-static const std::string AccessControlHeaderValue = "*";
+    static const std::string AccessControlHeaderValue = "*";
 
 } // namespace
 
@@ -53,20 +53,20 @@ void UsersController::Get(net::HTTPServerRequest &request, net::HTTPServerRespon
         std::vector<User> users;
         users_->FindAll(users);
 
-        nlohmann::json object = nlohmann::json::array();
+        nlohmann::json array = nlohmann::json::array();
 
         for (const auto &user : users)
         {
-            nlohmann::json u;
+            nlohmann::json object;
 
-            u["id"] = user.id;
-            u["name"] = user.name;
-            u["password"] = user.password;
+            object["id"] = user.id;
+            object["name"] = user.name;
+            object["password"] = user.password;
 
-            object.push_back(u);
+            array.push_back(object);
         }
 
-        const std::string usersArray = object.dump();
+        const std::string usersArray = array.dump();
 
         response.set(::AccessControlHeaderName, ::AccessControlHeaderValue);
         response.sendBuffer(usersArray.c_str(), usersArray.size());
