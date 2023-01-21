@@ -7,34 +7,28 @@
 namespace querries
 {
 
-static const std::string CreateTable = "CREATE TABLE IF NOT EXISTS Users (\n"
-                                       "ID INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                                       "User VARCHAR(50) NOT NULL,\n"
-                                       "Password VARCHAR(50) NOT NULL\n"
-                                       ")";
+    static const std::string CreateTable = "CREATE TABLE IF NOT EXISTS Users (\n"
+                                           "ID INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                                           "User VARCHAR(50) NOT NULL,\n"
+                                           "Password VARCHAR(50) NOT NULL\n"
+                                           ")";
 
-static const std::string InsertUser = "INSERT INTO Users(User, Password) VALUES(:User, :Password)";
+    static const std::string InsertUser = "INSERT INTO Users(User, Password) VALUES(:User, :Password)";
 
-static const std::string SelectUser = "SELECT User, Password FROM Users WHERE ID = :ID";
+    static const std::string SelectUser = "SELECT User, Password FROM Users WHERE ID = :ID";
 
-static const std::string SelectAllUsers = "SELECT ID, User, Password FROM Users";
+    static const std::string SelectAllUsers = "SELECT ID, User, Password FROM Users";
 
-static const std::string UpdateUser = "UPDATE Users SET User = :User, Password = :Password WHERE ID = :ID";
+    static const std::string UpdateUser = "UPDATE Users SET User = :User, Password = :Password WHERE ID = :ID";
 
-static const std::string DeleteUser = "DELETE FROM Users WHERE ID = :ID";
+    static const std::string DeleteUser = "DELETE FROM Users WHERE ID = :ID";
 
-static const std::string CountUsers = "SELECT COUNT(ID) FROM Users";
+    static const std::string CountUsers = "SELECT COUNT(ID) FROM Users";
 
 } // namespace querries
 
 UsersTable::UsersTable(std::shared_ptr<soci::session> session)
-    : session_{session}
-    , delete_{*session_}
-    , insert_{*session_}
-    , update_{*session_}
-    , select_{*session_}
-    , selectAll_{*session_}
-    , count_{*session_}
+    : session_{session}, delete_{*session_}, insert_{*session_}, update_{*session_}, select_{*session_}, selectAll_{*session_}, count_{*session_}
 {
     try
     {
@@ -127,6 +121,12 @@ void UsersTable::FindAll(std::vector<User> &users)
         users.clear();
 
         const size_t count = Count();
+
+        if (0 == count)
+        {
+            return;
+        }
+
         std::vector<size_t> ids;
         std::vector<std::string> names;
         std::vector<std::string> passwords;
