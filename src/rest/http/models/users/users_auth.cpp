@@ -2,7 +2,7 @@
 
 #include <http/models/users/users.hpp>
 
-#include <service/resources/messages.hpp>
+#include <resources/messages.hpp>
 
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Transaction.h>

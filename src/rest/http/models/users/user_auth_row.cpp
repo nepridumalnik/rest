@@ -1,6 +1,6 @@
 #include <http/models/users/user_auth_row.hpp>
 
-#include <service/resources/jsons.hpp>
+#include <resources/jsons.hpp>
 
 #include <nlohmann/json.hpp>
 

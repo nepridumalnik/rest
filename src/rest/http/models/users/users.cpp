@@ -1,8 +1,6 @@
 #include <http/models/users/users.hpp>
 
-// #include <service/resources/messages.hpp>
-
-// #include <service/utils/utils.hpp>
+#include <resources/messages.hpp>
 
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Transaction.h>
@@ -88,7 +86,7 @@ bool UsersTable::Insert(UserRow &user, std::string &error)
 
         if (res != 1)
         {
-            error = "messages::InsertionError";
+            error = messages::InsertionError;
             return false;
         }
 
@@ -121,7 +119,7 @@ bool UsersTable::FindById(size_t id, UserRow &user, std::string &error)
 
         if (res != 1)
         {
-            error = "messages::NotFound";
+            error = messages::NotFound;
             return false;
         }
 
@@ -148,7 +146,7 @@ bool UsersTable::Delete(size_t id, std::string &error)
 
         if (res != 1)
         {
-            error = "messages::DeletionError";
+            error = messages::DeletionError;
             return false;
         }
 
@@ -182,7 +180,7 @@ bool UsersTable::FindByCondition(UserRowCond &condition, UserRow &user, std::str
 
         if (res != 1)
         {
-            error = "messages::NotFound";
+            error = messages::NotFound;
             return false;
         }
 
