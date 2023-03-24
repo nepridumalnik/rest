@@ -4,12 +4,15 @@ set(SOURCES
     rest_server.cpp
 
     http/request_handler.cpp
-    http/method_handler.cpp
-    http/controllers/users_controller.cpp
-    http/controllers/goods_controller.cpp
+    http/controllers/user_get.cpp
 
-    models/tables/users.cpp
-    models/tables/goods.cpp
+    http/models/users/users.cpp
+    http/models/users/user_find_condition.cpp
+    http/models/users/user_row.cpp
+
+    resources/jsons.cpp
+    resources/messages.cpp
+    resources/connection_parameters.cpp
 )
 
 set(LIBRARIES

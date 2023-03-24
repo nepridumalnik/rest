@@ -16,4 +16,4 @@ set(LIBRARIES
 )
 
 add_executable(${TARGET} main.cpp)
-target_link_libraries(${TARGET} PRIVATE rest_server)
+target_link_libraries(${TARGET} PUBLIC rest_server)

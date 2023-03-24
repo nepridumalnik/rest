@@ -1,15 +1,19 @@
 #include <http/request_handler.hpp>
 
-#include <http/controllers/goods_controller.hpp>
-#include <http/controllers/users_controller.hpp>
+#include <http/controllers/user_get.hpp>
+
+#include <http/models/users/users.hpp>
 
 #include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Data/SessionPool.h>
 
-RequestHandler::RequestHandler(std::shared_ptr<soci::session> sql)
-    : sql_{sql}
+RequestHandler::RequestHandler(std::shared_ptr<Poco::Data::SessionPool> pool)
+    : pool_{pool}
 {
-    routing_.push_back({"/users", [this]() -> MethodHandler * { return new UsersController{sql_}; }});
-    routing_.push_back({"/goods", [this]() -> MethodHandler * { return new GoodsController{sql_}; }});
+    usersTable_ = std::make_shared<UsersTable>(pool_);
+
+    routing_.push_back({"/user/get", [&usersTable = usersTable_, this]()
+                        { return new UserGetController{usersTable}; }});
 }
 
 Poco::Net::HTTPRequestHandler *RequestHandler::createRequestHandler(const Poco::Net::HTTPServerRequest &request)

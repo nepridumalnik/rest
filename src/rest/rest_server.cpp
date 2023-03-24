@@ -2,23 +2,35 @@
 
 #include <http/request_handler.hpp>
 
-#include <soci/sqlite3/soci-sqlite3.h>
+#include <Poco/Data/MySQL/Connector.h>
+#include <Poco/Data/SessionFactory.h>
+#include <Poco/Data/SessionPool.h>
+#include <Poco/Data/Session.h>
 
 namespace
 {
 
-static const std::string DefaultDB = "default_base.db";
+    static const std::string ConnectionInfo = "host=localhost;port=3306;db=main_database;user=root;password===PaSsWoRd==";
 
 } // namespace
 
-RestServer::RestServer(std::shared_ptr<soci::session> sql)
+RestServer::RestServer(std::shared_ptr<Poco::Data::SessionPool> pool)
 {
-    if (!sql)
+    using namespace Poco::Data;
+
+    static constexpr size_t maxPoolSize = 100;
+    static constexpr size_t minPoolSize = 1;
+    static constexpr size_t idleTime = 10;
+    static constexpr size_t timeout = 10;
+
+    MySQL::Connector::registerConnector();
+
+    if (!pool)
     {
-        sql_ = std::make_shared<soci::session>(soci::sqlite3, ::DefaultDB);
+        pool = std::make_shared<SessionPool>(MySQL::Connector::KEY, ::ConnectionInfo, minPoolSize, maxPoolSize, idleTime, timeout);
     }
 
-    requestHandler_ = Poco::makeShared<RequestHandler>(sql_);
+    requestHandler_ = Poco::makeShared<RequestHandler>(pool);
     server_ = Poco::makeShared<Poco::Net::HTTPServer>(requestHandler_);
 }
 

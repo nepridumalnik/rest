@@ -30,23 +30,13 @@ class RestServer(ConanFile):
             'cmake',
         ]
 
-        self.options['soci'].with_mysql = self.options.with_mysql
-        self.options['soci'].with_sqlite3 = self.options.with_sqlite3
-        self.options['soci'].with_postgresql = self.options.with_postgresql
+        self.options['poco'].enable_data_mysql = self.options.with_mysql
+        self.options['poco'].enable_netssl = True
+        self.options['poco'].enable_net = True
 
     def requirements(self):
         self.requires('nlohmann_json/3.11.2')
         self.requires('poco/1.12.4')
-        self.requires('soci/4.0.3')
-
-        if self.options.with_sqlite3:
-            self.requires('sqlite3/3.39.4')
-
-        if self.options.with_mysql:
-            self.requires('libpq/14.5')
-
-        if self.options.with_postgresql:
-            self.requires('libmysqlclient/8.0.30')
 
     def build(self):
         cmake = CMake(self)

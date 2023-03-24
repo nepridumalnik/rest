@@ -1,23 +1,37 @@
 #pragma once
 
-#include <http/method_handler.hpp>
-
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
-
-#include <soci/session.h>
+#include <Poco/Net/HTTPServerRequest.h>
 
 #include <functional>
 #include <memory>
 #include <vector>
 
+namespace Poco::Data
+{
+    class SessionPool;
+} // namespace Poco::Data
+
+class UsersTable;
+class AbstractController;
+
 class RequestHandler : public Poco::Net::HTTPRequestHandlerFactory
 {
 public:
-    explicit RequestHandler(std::shared_ptr<soci::session> sql);
+    explicit RequestHandler(std::shared_ptr<Poco::Data::SessionPool> pool);
 
     Poco::Net::HTTPRequestHandler *createRequestHandler(const Poco::Net::HTTPServerRequest &request) override;
 
 private:
-    std::shared_ptr<soci::session> sql_;
-    std::vector<std::pair<std::string, std::function<MethodHandler *()>>> routing_;
+    /// @brief Таблица с пользователями
+    std::shared_ptr<UsersTable> usersTable_;
+
+    /// @brief Таблица с пользователями
+    // std::shared_ptr<UsersAuthTable> authTable_;
+
+    /// @brief Пул соединений
+    std::shared_ptr<Poco::Data::SessionPool> pool_;
+
+    /// @brief Маршруты
+    std::vector<std::pair<std::string, std::function<Poco::Net::HTTPRequestHandler *()>>> routing_;
 };
