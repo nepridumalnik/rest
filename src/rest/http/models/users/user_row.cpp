@@ -1,6 +1,6 @@
 #include <http/models/users/user_row.hpp>
 
-// #include <service/utils/utils.hpp>
+#include <utils/utils.hpp>
 
 #include <resources/jsons.hpp>
 
@@ -72,7 +72,7 @@ std::string UserRow::Tokenize() const
     const std::chrono::system_clock::time_point timestamp = std::chrono::system_clock::now();
     const std::string timestampStr = std::to_string(timestamp.time_since_epoch().count());
     const std::string payload = nlohmann::json{{json_fields::Password, password}, {json_fields::Email, email}, {json_fields::Timestamp, timestampStr}}.dump();
-    const std::string signature = "HashMD5(payload)";
+    const std::string signature = HashMD5(payload);
 
     std::string token;
     token.reserve(header.size() + payload.size() + signature.size() + timestampStr.size() + 2);
@@ -81,7 +81,7 @@ std::string UserRow::Tokenize() const
     token += payload + '.';
     token += signature;
 
-    return "HashMD5(token)";
+    return HashMD5(token);
 }
 
 bool UserRow::Validate() const

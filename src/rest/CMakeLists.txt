@@ -18,6 +18,8 @@ set(SOURCES
     resources/jsons.cpp
     resources/messages.cpp
     resources/connection_parameters.cpp
+
+    utils/utils.cpp
 )
 
 set(LIBRARIES

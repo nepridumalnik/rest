@@ -1,5 +1,7 @@
 #include <http/models/users/users.hpp>
 
+#include <utils/utils.hpp>
+
 #include <resources/messages.hpp>
 
 #include <Poco/Data/SessionPool.h>
@@ -74,7 +76,7 @@ bool UsersTable::Insert(UserRow &user, std::string &error)
         Transaction transaction{sql};
         Statement statement{sql};
 
-        std::string tmpPassword = "HashMD5(user.password)";
+        std::string tmpPassword = HashMD5(user.password);
 
         statement << querries::InsertUser,
             use(user.name), use(user.secondName),
@@ -166,7 +168,7 @@ bool UsersTable::FindByCondition(UserRowCond &condition, UserRow &user, std::str
 {
     try
     {
-        std::string tmpPassword = "HashMD5(condition.password)";
+        std::string tmpPassword = HashMD5(condition.password);
         Session sql = pool_->get();
         Statement statement{sql};
         statement << querries::SelectUserByCondition,
