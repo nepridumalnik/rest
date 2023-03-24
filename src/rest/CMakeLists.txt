@@ -16,6 +16,7 @@ set(SOURCES
     http/models/users/user_auth_row.cpp
 
     resources/jsons.cpp
+    resources/methods.cpp
     resources/messages.cpp
     resources/connection_parameters.cpp
 
