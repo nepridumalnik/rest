@@ -53,9 +53,8 @@ void UserGetController::getUserById(const size_t id,
 
     if (!usersTable_->FindById(id, user, error))
     {
-        const std::string errorCode = nlohmann::json{{json_fields::Error, error}}.dump();
-        res.send() << errorCode;
         res.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_NOT_FOUND);
+        res.send() << nlohmann::json{{json_fields::Error, error}}.dump();
     }
 
     res.send() << user.ToString();
