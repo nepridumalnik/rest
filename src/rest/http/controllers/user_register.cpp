@@ -1,6 +1,6 @@
 #include <http/controllers/user_register.hpp>
 
-#include <http/models/users/users.hpp>
+#include <models/users/users.hpp>
 
 #include <nlohmann/json.hpp>
 

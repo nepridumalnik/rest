@@ -1,9 +1,9 @@
 #pragma once
 
-#include <http/models/abstract_table_model.hpp>
+#include <models/abstract_table_model.hpp>
 
-#include <http/models/users/user_row.hpp>
-#include <http/models/users/user_find_condition.hpp>
+#include <models/users/user_row.hpp>
+#include <models/users/user_find_condition.hpp>
 
 #include <memory>
 #include <vector>

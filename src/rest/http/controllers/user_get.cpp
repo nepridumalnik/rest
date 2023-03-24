@@ -1,6 +1,6 @@
 #include <http/controllers/user_get.hpp>
 
-#include <http/models/users/users.hpp>
+#include <models/users/users.hpp>
 
 #include <resources/methods.hpp>
 #include <resources/jsons.hpp>

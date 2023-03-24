@@ -1,6 +1,6 @@
 #pragma once
 
-#include <http/models/users/users.hpp>
+#include <models/users/users.hpp>
 
 #include <helpers/macro.hpp>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <http/models/abstract_table_row.hpp>
+#include <models/abstract_table_row.hpp>
 
 /// @brief Пользователь
 struct UserRow : public AbstractTableRow

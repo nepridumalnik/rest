@@ -1,15 +1,17 @@
 #pragma once
 
-#include <http/models/abstract_table_row.hpp>
+#include <models/abstract_table_row.hpp>
 
-/// @brief Данные авторизации пользователя
-struct UserAuthRow : public AbstractTableRow
+#include <string>
+
+/// @brief Условие поиска пользователя
+struct UserRowCond : public AbstractTableRow
 {
-    /// @brief Идентификатор
-    int id;
+    /// @brief Пароль
+    std::string password;
 
-    /// @brief Токен
-    std::string token;
+    /// @brief Почта
+    std::string email;
 
     /// @see AbstractTableRow
     bool FromJson(const std::string &json) final;

@@ -1,6 +1,6 @@
-#include <http/models/users/users_auth.hpp>
+#include <models/users/users_auth.hpp>
 
-#include <http/models/users/users.hpp>
+#include <models/users/users.hpp>
 
 #include <resources/messages.hpp>
 

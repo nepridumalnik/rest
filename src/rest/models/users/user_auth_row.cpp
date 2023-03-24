@@ -1,4 +1,4 @@
-#include <http/models/users/user_auth_row.hpp>
+#include <models/users/user_auth_row.hpp>
 
 #include <resources/jsons.hpp>
 

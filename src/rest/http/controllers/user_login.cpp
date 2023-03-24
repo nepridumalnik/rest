@@ -1,7 +1,7 @@
 #include <http/controllers/user_login.hpp>
 
-#include <http/models/users/users.hpp>
-#include <http/models/users/users_auth.hpp>
+#include <models/users/users.hpp>
+#include <models/users/users_auth.hpp>
 
 #include <resources/methods.hpp>
 #include <resources/jsons.hpp>

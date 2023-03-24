@@ -9,11 +9,11 @@ set(SOURCES
     http/controllers/user_register.cpp
     http/controllers/user_search.cpp
 
-    http/models/users/users.cpp
-    http/models/users/users_auth.cpp
-    http/models/users/user_find_condition.cpp
-    http/models/users/user_row.cpp
-    http/models/users/user_auth_row.cpp
+    models/users/users.cpp
+    models/users/users_auth.cpp
+    models/users/user_find_condition.cpp
+    models/users/user_row.cpp
+    models/users/user_auth_row.cpp
 
     resources/jsons.cpp
     resources/methods.cpp

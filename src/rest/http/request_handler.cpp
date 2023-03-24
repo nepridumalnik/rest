@@ -5,8 +5,8 @@
 #include <http/controllers/user_register.hpp>
 #include <http/controllers/user_search.hpp>
 
-#include <http/models/users/users.hpp>
-#include <http/models/users/users_auth.hpp>
+#include <models/users/users.hpp>
+#include <models/users/users_auth.hpp>
 
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Data/SessionPool.h>
