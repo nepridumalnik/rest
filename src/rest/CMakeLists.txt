@@ -5,6 +5,9 @@ set(SOURCES
 
     http/request_handler.cpp
     http/controllers/user_get.cpp
+    http/controllers/user_login.cpp
+    http/controllers/user_register.cpp
+    http/controllers/user_search.cpp
 
     http/models/users/users.cpp
     http/models/users/user_find_condition.cpp

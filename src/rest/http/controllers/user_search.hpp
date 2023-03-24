@@ -6,27 +6,28 @@
 
 class UsersTable;
 
-/// @brief Контроллер получения пользователей
-class UserGetController : public Poco::Net::HTTPRequestHandler
+/// @brief Контроллер получения списка пользователей с путём /user/search
+class UserSearchController : public Poco::Net::HTTPRequestHandler
 {
 public:
     /// @brief Конструктор
-    explicit UserGetController(std::shared_ptr<UsersTable> usersTable);
+    explicit UserSearchController(std::shared_ptr<UsersTable> usersTable);
 
     /// @see HTTPRequestHandler
     void handleRequest(Poco::Net::HTTPServerRequest &req,
                        Poco::Net::HTTPServerResponse &res) final;
 
 private:
-    /// @brief Получить пользователя по идентификатору
-    /// @param id Идентификатор
+    /// @brief Найти пользователей
     /// @param req Запрос
     /// @param res Ответ
-    void getUserById(const size_t id,
-                     Poco::Net::HTTPServerRequest &req,
+    void searchUsers(Poco::Net::HTTPServerRequest &req,
                      Poco::Net::HTTPServerResponse &res);
 
 private:
     /// @brief Таблица с пользователями
     std::shared_ptr<UsersTable> usersTable_;
+
+    /// @brief Путь до /user/search
+    static const std::string route_;
 };
