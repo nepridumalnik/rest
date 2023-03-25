@@ -77,7 +77,7 @@ void UserLoginController::unauthorize(Poco::Net::HTTPServerRequest &req,
     std::istream &bodyStream = req.stream();
     std::string body;
     Poco::StreamCopier::copyToString(bodyStream, body);
-    nlohmann::json object = nlohmann::json::parse(body);
+    const nlohmann::json object = nlohmann::json::parse(body);
 
     if (!object.contains(json_fields::Token) && !object[json_fields::Token].is_string())
     {
@@ -107,7 +107,7 @@ void UserLoginController::authenticate(Poco::Net::HTTPServerRequest &req,
     std::istream &bodyStream = req.stream();
     std::string body;
     Poco::StreamCopier::copyToString(bodyStream, body);
-    nlohmann::json object = nlohmann::json::parse(body);
+    const nlohmann::json object = nlohmann::json::parse(body);
 
     if (!object.contains(json_fields::Token) && !object[json_fields::Token].is_string())
     {
