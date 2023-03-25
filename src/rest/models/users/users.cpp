@@ -3,11 +3,13 @@
 #include <utils/utils.hpp>
 
 #include <resources/messages.hpp>
+#include <resources/jsons.hpp>
 
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Transaction.h>
 #include <Poco/Data/Connector.h>
 #include <Poco/Data/Statement.h>
+#include <Poco/Data/RecordSet.h>
 #include <Poco/Data/MySQL/MySQLException.h>
 
 #include <stdexcept>
@@ -205,22 +207,41 @@ bool UsersTable::SearchByNames(std::vector<UserRow> &users, std::string &firstNa
 {
     try
     {
-        users.clear();
         UserRow user{};
 
         Session sql = pool_->get();
         Statement statement{sql};
-        statement << querries::SearchUsers,
-            use(firstName), use(secondName),
-            into(user.id), into(user.name), into(user.secondName),
-            into(user.age), into(*reinterpret_cast<int *>(&user.male)),
-            into(user.interests), into(user.city), into(user.password),
-            into(user.email), range(0, 1);
+        statement << querries::SearchUsers, use(firstName), use(secondName), now;
 
-        while (!statement.done())
+        RecordSet result{statement};
+
+        users.clear();
+        users.resize(result.rowCount());
+        size_t counter = 0;
+
+        while (result.moveNext())
         {
-            statement.execute();
-            users.push_back(std::move(user));
+            static const std::string id = "ID";
+            static const std::string name = "Name";
+            static const std::string secondName = "SecondName";
+            static const std::string age = "Age";
+            static const std::string male = "Male";
+            static const std::string interests = "Interests";
+            static const std::string city = "City";
+            static const std::string password = "Password";
+            static const std::string email = "Email";
+
+            users[counter].id = result[id].convert<size_t>();
+            users[counter].name = result[name].convert<std::string>();
+            users[counter].secondName = result[secondName].convert<std::string>();
+            users[counter].age = result[age].convert<unsigned int>();
+            users[counter].male = result[male].convert<bool>();
+            users[counter].interests = result[interests].convert<std::string>();
+            users[counter].city = result[city].convert<std::string>();
+            users[counter].password = result[password].convert<std::string>();
+            users[counter].email = result[email].convert<std::string>();
+
+            ++counter;
         }
 
         return true;
