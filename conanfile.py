@@ -11,34 +11,20 @@ class RestServer(ConanFile):
         'arch',
     ]
 
-    options = {
-        'shared': [True, False],
-        'with_sqlite3': [True, False],
-        'with_mysql': [True, False],
-        'with_postgresql': [True, False],
-    }
-
-    default_options = {
-        'shared': True,
-        'with_sqlite3': True,
-        'with_mysql': True,
-        'with_postgresql': True,
-    }
-
-    def configure(self):
+    def configure(self) -> None:
         self.generators = [
             'cmake',
         ]
 
-        self.options['poco'].enable_data_mysql = self.options.with_mysql
+        self.options['poco'].enable_data_mysql = True
         self.options['poco'].enable_netssl = True
         self.options['poco'].enable_net = True
 
-    def requirements(self):
+    def requirements(self) -> None:
         self.requires('nlohmann_json/3.11.2')
         self.requires('poco/1.12.4')
 
-    def build(self):
+    def build(self) -> None:
         cmake = CMake(self)
         cmake.definitions['BUILD_SHARED_LIBS'] = 'ON' if self.options.shared else 'OFF'
 
